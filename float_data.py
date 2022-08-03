@@ -383,6 +383,19 @@ def match_profiles(avg0, avg1, dist=None):
         #norms[j, i] = norms[i, j]
   return np.argmin(norms, axis=1)
 
+def match_spatial(data_classes, data_classes_ref, n_classes):
+  """
+  Attempt to match profiles with the same spatial distribution
+  data_classes: 
+  data_classes_ref:
+  n_classes
+  returns:
+  inds: array of indices that sorts the classes in data_classes
+  """
+  
+  counts = np.array([[((data_classes.where(data_classes_ref==k) == j) * np.cos(data_classes['lat'] * 3.1415/180)).sum(skipna=True) for k in range(n_classes) ] for j in range(n_classes)])
+  return np.argmax(np.array(counts), axis=0)
+
 
 def temp_sort(data_classes, avg, arg=False):
   """
